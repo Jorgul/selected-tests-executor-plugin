@@ -1,7 +1,7 @@
 /**
  * Load a file from file system using RPC. On error, an alert will be shown. On
  * success, the callback function will be called.
- * 
+ *
  * @param filePath
  *            The path of the file in the file system.
  * @param callback
@@ -30,21 +30,21 @@ function loadFileFromServer(filePath, callback) {
  * tree defined in the properties file and fields.
  * The tree UI consists of:
  * 	group checkbox - by clicking on this checkbox all the sub group will be
- * 		selected/unselected and will be added to the selectedTests variable. 
- * 		
+ * 		selected/unselected and will be added to the selectedTests variable.
+ *
  * 	test checbox - by clicking on this checkbox, the test will be added to
  * 		the selectedTests variable.
  * 		If by clicking on this checkbox all the group is marked, then the group
  * 		checkbox will be marked as well.
  * 		If by clicking on this checkbox all the group is not marked, then the
  * 		group checkbox will not be marked as well.
- * 	
+ *
  * 	multiplicity textbox - by entering a number the number will be added to
  * 		the appropriate test in the multiplicityField.
  *		If the value was not a number the textbox will be colored in red.
  *		If the value was 0 or not a number, then the number that will be saved
- *		will be 1.   
- * 
+ *		will be 1.
+ *
  * @param filePath
  *            The properties file path.
  * @param selectedTestsTextBoxName
@@ -72,7 +72,7 @@ function loadTreeFromFile(filePath, selectedTestsTextBoxName,
 /**
  * For each field that exist in fields, it will override this field in
  * properties.
- * 
+ *
  * @param properties
  *            JSON object containing properties.
  * @param fields
@@ -92,7 +92,7 @@ function overrideSettings(properties, fields) {
  * they will be written to selectedTestsTextBox. The parameters for building the
  * tree defined in the properties file and fields. testsTreeContainer and
  * selectedTestsTextBox defined in fields.
- * 
+ *
  * @param propertiesFileContent
  *            The content of the properties file.
  * @param fields
@@ -154,7 +154,7 @@ function loadTreeFromProperties(propertiesFileContent, fields) {
 
 /**
  * Convert a list of elements as string to an array.
- * 
+ *
  * @param str
  *            String where the elements in it are separated by comma.
  * @returns {Array} Consists all the elements from the string.
@@ -177,7 +177,7 @@ function commaSeperatedToArray(str) {
  *  - groups: All available group names in the tests (sorted by name).
  *  - groupsMap: map group name to an array of tests.
  * Validate the rest of the fields and trim spaces if necessary.
- * 
+ *
  * @param properties
  *            The properties.
  */
@@ -287,7 +287,7 @@ function getGroups(properties) {
 
 /**
  * Renders the tree to treeContainer
- * 
+ *
  * @param properties
  *            The properties
  */
@@ -307,7 +307,7 @@ function loadTree(properties) {
 
 /**
  * Create a group of tests for the tree and add it to the tree.
- * 
+ *
  * @param groupName
  *            The name of the group
  * @param groupTests
@@ -370,7 +370,7 @@ function createGroup(groupName, groupTests, properties) {
 
 /**
  * Convert multiplicity value from string to integer.
- * 
+ *
  * @param value
  *            {String} Multiplicity value
  * @returns {Integer} Multiplicity value. returns 0, if the value in not a
@@ -387,7 +387,7 @@ function getMultiplicityAsInt(value) {
 
 /**
  * Create a test for a group in the tree and add it to the group in the tree.
- * 
+ *
  * @param groupContainer
  *            The group container (div).
  * @param test
@@ -435,6 +435,7 @@ function createTest(groupContainer, test, testIndex, groupState, properties) {
 	multi.type = "text";
 	multi.className = "multiplicityInput";
 	multi.style.backgroundColor = "#FFF";
+	multi.style.display = "none";
 
 	multi.onchange = function() {
 		var input = getMultiplicityAsInt(multi.value);
@@ -454,16 +455,44 @@ function createTest(groupContainer, test, testIndex, groupState, properties) {
 	testTitle.style.paddingLeft = "5px";
 	testTitle.innerHTML = testName;
 
+	var testScreenshot = document.createElement('img');
+
+	testScreenshot.className = "tree-button button-image";
+
+	var testCaseScreenshotFullPath = "/plugin/selected-tests-executor/testScreenshots/" + groupContainer.getAttribute("name") + "." + testName + ".png";
+	testCaseScreenshotFullPath = testCaseScreenshotFullPath.replace(/\"/g, "");
+	var screenshotId = groupContainer.getAttribute("name") + "." + testName;
+	screenshotId = screenshotId.replace(/\"/g, "");
+
+	testScreenshot.onclick = function(event) {
+
+		var screenshotElement = document.getElementById(screenshotId);
+		if(screenshotElement.style.display == "block") {
+			screenshotElement.style.display = "none";
+		}
+		else {
+			screenshotElement.style.display = "block";
+		}
+	}
+
+	var testScreenshotImg = document.createElement('img');
+	testScreenshotImg.setAttribute("id", screenshotId);
+	testScreenshotImg.className = "screenshot";
+	testScreenshotImg.setAttribute("src", testCaseScreenshotFullPath);
+	testScreenshotImg.style.display = "none";
+
 	var testDiv = document.createElement('div');
 	testDiv.appendChild(testCheck);
 	testDiv.appendChild(multi);
 	testDiv.appendChild(testTitle);
+	testDiv.appendChild(testScreenshot);
+	testDiv.appendChild(testScreenshotImg);
 	groupContainer.appendChild(testDiv);
 }
 
 /**
  * Add/Remove test from selected tests.
- * 
+ *
  * @param testIndex
  *            The test index in the group array.
  * @param dontCommit
@@ -546,7 +575,7 @@ function getTestComperator(fieldsToShow) {
 
 /**
  * Parse .properties files
- * 
+ *
  * @param data
  *            The properties file content.
  * @returns {Object} Key/Value map of the properties.
@@ -582,7 +611,7 @@ function readPropertiesData(data) {
 
 /**
  * Set the state of a group (selected/unselected).
- * 
+ *
  * @param groupDiv
  *            The div containing the group.
  * @param checkElement
@@ -595,7 +624,7 @@ function setGroup(groupDiv, checkElement) {
 
 /**
  * Select/Unselect all the tests in a group.
- * 
+ *
  * @param groupDiv
  *            The div containing the group.
  * @param check
@@ -617,7 +646,7 @@ function selectGroup(groupDiv, check) {
 
 /**
  * Select/Unselect all the tests in a group.
- * 
+ *
  * @param divName
  *            The div name containing the group.
  * @param check
@@ -630,7 +659,7 @@ function selectGroupInDiv(divName, check) {
 
 /**
  * Check/Uncheck all checkboxes
- * 
+ *
  * @param checkboxes
  *            {Array} Checkboxes
  * @param check
@@ -647,7 +676,7 @@ function checkAll(checkboxes, check) {
 
 /**
  * Switch the visibility of the tests of a group.
- * 
+ *
  * @param groupDiv
  *            A div containing the group to show/hide.
  * @param button
@@ -711,7 +740,7 @@ function isAllFieldsEmpty(fields) {
 /**
  * Sets all override fields with the fields from the properties file.
  * Will show alert if at least one textbox isn't empty.
- * 
+ *
  * @param propertiesFilePathTextBoxName
  * @param enableFieldTextBoxName
  * @param groupByTextBoxName
@@ -748,7 +777,7 @@ function loadSettingsFromPropertiesFile(propertiesFilePathTextBoxName,
 /**
  * Set a textbox with a new value if the new value isn't empty. If the value
  * changes it will call onkeyup().
- * 
+ *
  * @param fieldBox
  *            The textbox DOM element.
  * @param newValue
@@ -764,7 +793,7 @@ function setFieldBox(fieldBox, newValue) {
 
 /**
  * Sets all override fields with the fields from the properties file.
- * 
+ *
  * @param propertiesFileContent
  *            The properties file content.
  * @param fields
@@ -783,7 +812,7 @@ function loadSettings(propertiesFileContent, fields) {
 
 /**
  * Get all the fields of the configuration UI based on uuid.
- * 
+ *
  * @param uuid
  *            The TextExecuter UUID
  * @returns {Object} The configuratio fields as Key/Value map.
@@ -813,7 +842,7 @@ function getConfigFields(uuid) {
  * Toggle Show/Hide the available fields next to the relavent textboxes in the
  * configuration UI. When showing the fields, it will load them from the
  * properties file entered in the UI.
- * 
+ *
  * @param button
  *            The button DOM element.
  * @param uuid
@@ -843,7 +872,7 @@ function showHideAvailableFields(button, uuid) {
 
 /**
  * Convert an array of strings to a comma separated list.
- * 
+ *
  * @param array
  *            Array of strings.
  * @returns {String} A comma separated list.
@@ -865,7 +894,7 @@ function arrayToCommaSeperated(array) {
 /**
  * Show the available fields next to the relavent textboxes in the configuration
  * UI.
- * 
+ *
  * @param propertiesFileContent
  *            The properties file content.
  * @param fields
@@ -897,7 +926,7 @@ function setAvailableFields(propertiesFileContent, fields) {
 
 /**
  * Add selection options for a select field.
- * 
+ *
  * @param selectBox
  *            The select box DOM element.
  * @param availableFields
@@ -926,7 +955,7 @@ function setSelectionOptions(selectBox, availableFields, current) {
 
 /**
  * Add an option to a select box.
- * 
+ *
  * @param container
  *            The select box DOM element.
  * @param value
@@ -952,7 +981,7 @@ function addOption(container, value, title, isSelected) {
 
 /**
  * Add item to a comma separeted list in a textbox.
- * 
+ *
  * @param fieldName
  *            The field to add to the list.
  * @param showFieldsTextBox
@@ -969,7 +998,7 @@ function addToTextBoxList(fieldName, showFieldsTextBox) {
 
 /**
  * Remove item from a comma separeted list in a textbox.
- * 
+ *
  * @param fieldName
  *            The field to remove from the list.
  * @param showFieldsTextBox
@@ -988,7 +1017,7 @@ function removeFromTextBoxList(fieldName, showFieldsTextBox) {
  * Create a list item for the available fields to show. Next to each field will
  * appear the amount of tests it appears in and an option to add/remove it from
  * the list.
- * 
+ *
  * @param fieldList
  *            The container of the fields.
  * @param fields
@@ -1037,7 +1066,7 @@ function createFieldToShow(fieldList, fields, fieldName, count, total) {
 /**
  * On textbox edit, we need to update the relavent select box to show the
  * default option.
- * 
+ *
  * @param selectBoxName
  *            The select box name.
  */

@@ -1,0 +1,1 @@
+The main goal of this file is to guarantee that the "testScreenshot" folder is created when building this Jenkins plugin.
