@@ -481,6 +481,12 @@ function createTest(groupContainer, test, testIndex, groupState, properties) {
 	testScreenshotImg.setAttribute("src", testCaseScreenshotFullPath);
 	testScreenshotImg.style.display = "none";
 
+	testScreenshotImg.onerror = function(event) {
+		var screenshotElement = document.getElementById(screenshotId);
+		screenshotElement.style.display = "none";
+		testTitle.style.color = "blue";
+	}
+
 	var testDiv = document.createElement('div');
 	testDiv.appendChild(testCheck);
 	testDiv.appendChild(multi);

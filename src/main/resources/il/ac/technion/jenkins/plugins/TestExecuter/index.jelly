@@ -53,6 +53,8 @@
 		}
 
 		.button-image {
+			width: 16px;
+			height: 16px;
 			background-image:
 				url('${rootURL}/plugin/selected-tests-executor/images/button-image.gif');
 		}
