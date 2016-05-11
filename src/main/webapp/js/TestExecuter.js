@@ -455,16 +455,16 @@ function createTest(groupContainer, test, testIndex, groupState, properties) {
 	testTitle.style.paddingLeft = "5px";
 	testTitle.innerHTML = testName;
 
-	var testScreenshot = document.createElement('img');
+	var testScreenshotButton = document.createElement('img');
 
-	testScreenshot.className = "tree-button button-image";
+	testScreenshotButton.className = "tree-button button-image";
 
 	var testCaseScreenshotFullPath = "/plugin/selected-tests-executor/testScreenshots/" + groupContainer.getAttribute("name") + "." + testName + ".png";
 	testCaseScreenshotFullPath = testCaseScreenshotFullPath.replace(/\"/g, "");
 	var screenshotId = groupContainer.getAttribute("name") + "." + testName;
 	screenshotId = screenshotId.replace(/\"/g, "");
 
-	testScreenshot.onclick = function(event) {
+	testScreenshotButton.onclick = function(event) {
 
 		var screenshotElement = document.getElementById(screenshotId);
 		if(screenshotElement.style.display == "block") {
@@ -482,8 +482,7 @@ function createTest(groupContainer, test, testIndex, groupState, properties) {
 	testScreenshotImg.style.display = "none";
 
 	testScreenshotImg.onerror = function(event) {
-		var screenshotElement = document.getElementById(screenshotId);
-		screenshotElement.style.display = "none";
+		testScreenshotButton.style.display = "none";
 		testTitle.style.color = "blue";
 	}
 
@@ -491,7 +490,7 @@ function createTest(groupContainer, test, testIndex, groupState, properties) {
 	testDiv.appendChild(testCheck);
 	testDiv.appendChild(multi);
 	testDiv.appendChild(testTitle);
-	testDiv.appendChild(testScreenshot);
+	testDiv.appendChild(testScreenshotButton);
 	testDiv.appendChild(testScreenshotImg);
 	groupContainer.appendChild(testDiv);
 }
