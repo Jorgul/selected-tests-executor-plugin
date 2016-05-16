@@ -454,6 +454,7 @@ function createTest(groupContainer, test, testIndex, groupState, properties) {
 	var testTitle = document.createElement('span');
 	testTitle.style.paddingLeft = "5px";
 	testTitle.innerHTML = testName;
+	testTitle.style.color = "red";
 
 	var testScreenshotButton = document.createElement('img');
 
@@ -483,7 +484,7 @@ function createTest(groupContainer, test, testIndex, groupState, properties) {
 
 	testScreenshotImg.onerror = function(event) {
 		testScreenshotButton.style.display = "none";
-		testTitle.style.color = "blue";
+		testTitle.style.color = "black";
 	}
 
 	var testDiv = document.createElement('div');
